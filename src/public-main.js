@@ -4,8 +4,10 @@ import { defaults } from './settings.js';
 import { WinterScene } from './scene.js';
 import { catalogProducts, mountCatalog } from './catalog-ui.js';
 import { loadProjectTextures } from './project-textures.js';
+import { startPreloader } from './preloader.js';
 
 const $ = (selector) => document.querySelector(selector);
+const preloader = startPreloader();
 let scene;
 
 try {
@@ -21,10 +23,9 @@ try {
   }, catalogProducts, catalog);
   scene.setPanelVisible(false);
   await scene.ready;
+  preloader.sceneReady();
   await loadProjectTextures(scene).catch(error => console.warn('Project textures:', error));
-  const loading = $('#loading');
-  loading.classList.add('loaded');
-  setTimeout(() => loading.remove(), 800);
+  preloader.finish();
 } catch (error) {
   console.error('Scene initialization failed', error);
   $('#error').hidden = false;

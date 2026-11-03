@@ -159,7 +159,13 @@
           </form>
         </div>
       </dialog>
-      <div id="loading"><span class="loading-mark">✳</span><span>Формуємо крижану ущелину…</span></div>
+      <div id="loading" lang="en">
+        <div class="loader-dial">
+          <div class="loader-counter" aria-hidden="true"><span id="loader-count">00</span><span>%</span></div>
+          <div class="loader-track" aria-hidden="true"></div>
+          <div class="loader-meta" role="status">Preparing the storm</div>
+        </div>
+      </div>
       <div id="error" hidden><h1>Не вдалося відкрити 3D-сцену</h1><p>Для перегляду потрібен браузер із підтримкою WebGL 2 та апаратним прискоренням.</p><button onclick="location.reload()">Спробувати знову</button></div>
     </main>
     <script type="module" src="/src/public-main.js"></script>

@@ -1,0 +1,42 @@
+#loading {
+  background: radial-gradient(ellipse at 65% 25%, #20394e, #0a1723 66%);
+  color: #edf6ff;
+  --load-progress: 0%;
+}
+
+.loader-dial {
+  width: min(360px, calc(100vw - 56px));
+  font-family: 'IBM Plex Mono', monospace;
+}
+
+.loader-meta {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 12px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: #b3c9d9;
+}
+
+.loader-counter {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  padding-block: 10px;
+  font: 600 clamp(64px, 15vw, 104px)/1 'IBM Plex Mono', monospace;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -.1em;
+}
+
+.loader-counter span:last-child {
+  color: #ff3c00;
+  font-size: .34em;
+  letter-spacing: 0;
+}
+
+.loader-track {
+  height: 3px;
+  margin-bottom: 15px;
+  background: linear-gradient(to right, #ff3c00 var(--load-progress), #ffffff30 var(--load-progress));
+}
