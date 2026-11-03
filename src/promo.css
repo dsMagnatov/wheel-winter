@@ -1,0 +1,201 @@
+@font-face {
+  font-family: 'Winter Condensed';
+  src: url('/fonts/WinterCondensed-Bold.woff2') format('woff2');
+  font-weight: 700;
+  font-display: swap;
+}
+
+.promo {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  overflow: hidden;
+  pointer-events: none;
+  font-family: 'Winter Condensed', 'Arial Narrow', sans-serif;
+  font-weight: 700;
+  color: #fff;
+  text-transform: uppercase;
+}
+
+#app:not(.ui-hidden) .promo { display: none; }
+
+.promo-header {
+  position: absolute;
+  top: 24px;
+  left: 24px;
+  display: flex;
+  align-items: center;
+  padding: 10px 14px;
+  gap: 16px;
+  background: #fff;
+  color: #101113;
+  pointer-events: auto;
+}
+
+.promo-brand {
+  font-size: 27px;
+  line-height: 1;
+}
+
+.promo-header nav {
+  display: flex;
+  gap: 14px;
+  padding-left: 14px;
+  border-left: 1px solid #d4d4d4;
+}
+
+.promo-header a {
+  color: inherit;
+  font-size: 16px;
+  text-decoration: none;
+}
+
+.promo-header a:hover,
+.promo-header a:focus-visible {
+  text-decoration: underline;
+  text-decoration-color: #ff3c00;
+  text-underline-offset: .2em;
+}
+
+.promo-copy:focus {
+  outline: 1px solid #fff;
+  outline-offset: 8px;
+}
+
+.promo-title {
+  position: absolute;
+  left: 3.25%;
+  bottom: 5.7%;
+  margin: 0;
+  font: inherit;
+  font-size: min(6.05vw, 9.55vh);
+  line-height: .81;
+  white-space: nowrap;
+}
+
+.promo-title > span { display: block; }
+.promo-title > span:first-child {
+  margin-left: 8.65vw;
+  transform: scaleX(.87);
+  transform-origin: left;
+}
+.promo-title > span:nth-child(2) {
+  transform: scaleX(.82);
+  transform-origin: left;
+}
+.promo-split span { margin-left: 4.7vw; }
+
+.promo-copy {
+  position: absolute;
+  left: 64.8%;
+  color: #ff3c00;
+  font-size: min(1.6vw, 2.5vh);
+  line-height: 1.19;
+  white-space: nowrap;
+}
+
+.promo-copy-top { top: 8.45%; }
+.promo-copy-bottom { bottom: 6.5%; }
+.promo-copy p { margin: 0; }
+.promo-copy p + p { margin-top: .75em; }
+.promo-copy p > span { display: block; }
+.promo-copy-top p:first-child > span:first-child { padding-left: 2.35vw; }
+.promo-copy i { display: inline-block; width: 1.1em; }
+
+.promo-speed {
+  position: absolute;
+  top: 46.6%;
+  left: 69.65%;
+  font-size: min(7.3vw, 11.45vh);
+  line-height: .8;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+.promo-speed-unit { font-size: .56em; }
+
+.promo-marquee {
+  position: absolute;
+  inset: 44.1% 0 auto 59%;
+  overflow: hidden;
+  mask-image: linear-gradient(to right, transparent, black 13%);
+  color: rgb(255 255 255 / 16%);
+  font-size: min(10.5vw, 16.8vh);
+  line-height: .88;
+}
+
+.promo-marquee-track {
+  display: flex;
+  width: max-content;
+  animation: promo-marquee 28s linear infinite;
+}
+
+.promo-marquee-track span {
+  flex: none;
+  padding-right: .22em;
+  white-space: pre;
+}
+
+.promo-filter-definitions { position: absolute; }
+
+/* Edge blocks follow the tangent of the scene's swirl. */
+#app.ui-hidden.spin-active :is(.promo-header, .promo-title, .promo-copy, .promo-marquee, .show-ui) {
+  --edge-motion: calc(var(--spin-effect, 0) * var(--spin-text-motion, 1));
+  --edge-softness: calc(var(--spin-effect, 0) * var(--spin-text-blur, 1));
+  translate: calc(var(--edge-motion) * var(--edge-x, 0px)) calc(var(--edge-motion) * var(--edge-y, 0px));
+  rotate: calc(var(--edge-motion) * var(--edge-turn, 0deg));
+  filter: var(--edge-warp,) blur(calc(var(--edge-softness) * var(--edge-blur, 0px)));
+}
+
+#app.spin-text-warp :is(.promo-title, .promo-copy, .promo-marquee) {
+  --edge-warp: url("#spin-text-warp");
+}
+
+.promo-header {
+  --edge-x: 12px;
+  --edge-y: -6px;
+  --edge-turn: 3deg;
+  --edge-blur: 2px;
+}
+
+.promo-title {
+  --edge-x: -14px;
+  --edge-y: -21px;
+  --edge-turn: 5deg;
+  --edge-blur: 5px;
+}
+
+.promo-copy {
+  --edge-y: 14px;
+  --edge-turn: 4deg;
+  --edge-blur: 4px;
+}
+
+.promo-copy-top { --edge-x: 18px; }
+.promo-copy-bottom { --edge-x: -18px; }
+
+.promo-marquee {
+  --edge-y: 16px;
+  --edge-turn: 3deg;
+  --edge-blur: 3px;
+}
+
+.show-ui {
+  --edge-x: 5px;
+  --edge-y: 6px;
+  --edge-turn: 4deg;
+  --edge-blur: 1.5px;
+}
+
+@keyframes promo-marquee {
+  to { transform: translateX(-50%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .promo-marquee-track { animation: none; }
+  #app.ui-hidden.spin-active :is(.promo-header, .promo-title, .promo-copy, .promo-marquee, .show-ui) {
+    translate: none;
+    rotate: none;
+    filter: none;
+  }
+}

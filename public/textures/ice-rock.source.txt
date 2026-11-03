@@ -1,0 +1,8 @@
+Asset: ice-rock.png
+Created: 2026-11-02
+Method: built-in image_gen image generation
+Dimensions: 1254 x 1254
+Purpose: cold dark fractured rock/ice albedo for the winter cliff scene.
+
+Prompt:
+Use case: photorealistic-natural. Asset type: square seamless tileable PBR albedo texture for a Three.js icy mountain cliff. Generate a full-bleed close-up of dark blue-black slate and granite rock with naturally fractured diagonal strata, deep sharp irregular fissures, worn mineral faces, a thin translucent steel-blue ice glaze and a sparse dusting of white frost and snow caught inside cracks. Flat diffuse overcast lighting, deliberately no directional highlights or cast shadows baked in, no horizon or scene perspective, photographed orthogonally as a high-resolution surface material scan. Restrained realistic blue-grey palette, about 85 percent dark natural rock, 10 percent ice and frost, 5 percent snow. Fine physically convincing grain and variation at multiple scales. The rock is mostly dark so a procedural snow cap can be blended on top. Seamless repeat in both axes: opposite edges must match. Not a whole cliff scene, not an illustration. No wheel, no sky, no text, no logos, no borders or watermark.

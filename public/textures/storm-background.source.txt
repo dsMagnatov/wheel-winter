@@ -1,0 +1,7 @@
+Asset: storm-background.png
+Created: 2026-11-02
+Method: built-in image_gen image generation
+Purpose: photoreal cinematic storm sky and distant alpine mountain background for the live 3D winter scene.
+
+Prompt:
+Use case: photorealistic-natural. Asset type: cinematic 16:9 landscape background environment plate for a live Three.js winter tyre scene. Generate a photograph-quality Arctic alpine storm atmosphere, no foreground objects. Composition: stormy steel-blue sky occupies the upper 70 percent of the frame, layered natural volumetric grey clouds with deep dark blue-grey on the left and a soft pale diffuse icy glow in the upper right. A distant jagged snow-covered mountain range sits mainly on the far right and low in the frame, strongly softened by sheets of blowing mist, with a hazy cold valley across the lower half. The center will sit behind a large live 3D wheel, so keep the central area atmospheric, low-detail, misty, and spatially deep, without a strong central mountain peak. Faraway mountain shapes are realistic geology with snow and bluish rock, partly lost in fog and depth of field. Cinematic cold blue-grey palette, restrained contrast, believable high-altitude winter weather, photoreal professional automotive advertising backdrop. Wide landscape 16:9 framing. No foreground cliffs, no rock pedestal, no road, no wheel, no car, no products, no buildings, no people, no text, no logos, no watermark. Do not bake individual snowflakes or particles into the photograph; the app renders moving snow live.

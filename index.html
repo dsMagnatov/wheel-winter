@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="uk">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#0d0e10" />
+    <meta name="description" content="Зимовий ландшафт, сніг і колесо. Інтерактивна студія матеріалів та освітлення на Three.js." />
+    <title>Зимова сцена · Студія колеса</title>
+    <link rel="stylesheet" href="/src/scan-screen.css" />
+  </head>
+  <body>
+    <main id="app">
+      <canvas id="scene" aria-label="Колесо між двома крижаними скелями у сніговій бурі"></canvas>
+      <svg class="promo-filter-definitions" width="0" height="0" aria-hidden="true" focusable="false">
+        <defs>
+          <filter id="spin-text-warp" x="-25%" y="-40%" width="150%" height="180%" color-interpolation-filters="sRGB">
+            <feTurbulence id="spin-text-wave" type="fractalNoise" baseFrequency="0.004 0.018"
+              numOctaves="1" seed="7" result="wave" />
+            <feComponentTransfer in="wave" result="directional-wave">
+              <feFuncR type="linear" slope="0.65" intercept="0.175" />
+            </feComponentTransfer>
+            <feDisplacementMap id="spin-text-displacement" in="SourceGraphic" in2="directional-wave"
+              scale="0" xChannelSelector="R" yChannelSelector="G" />
+          </filter>
+        </defs>
+      </svg>
+      <section class="promo" lang="en" aria-label="Winter tire showcase">
+        <header class="promo-header">
+          <span class="promo-brand">Northgrip</span>
+          <nav aria-label="Showcase">
+            <a href="#promo-tread">Tread</a>
+            <a href="#promo-demo">Demo</a>
+          </nav>
+        </header>
+        <div class="promo-marquee" aria-hidden="true">
+          <div class="promo-marquee-track">
+            <span>Winter grip · Control in the snow · </span>
+            <span>Winter grip · Control in the snow · </span>
+          </div>
+        </div>
+        <h1 class="promo-title">
+          <span>Winter tires built</span>
+          <span>to keep you in</span>
+          <span class="promo-split">control <span>when snow</span></span>
+          <span>falls</span>
+        </h1>
+        <div id="promo-tread" class="promo-copy promo-copy-top" tabindex="-1">
+          <p>
+            <span>When winter changes the road,</span>
+            <span>every edge of the tread matters.</span>
+            <span>Grip starts where the snow begins.</span>
+          </p>
+          <p>
+            <span>Built for the roads winter leaves behind,</span>
+            <span>where packed snow <i></i> gives way to slush</span>
+            <span>and wet asphalt <i></i> turns to ice.</span>
+            <span>Directional grooves channel water away,</span>
+            <span>fine sipes <i></i> add biting edges,</span>
+            <span>and the winter compound stays flexible</span>
+            <span>as the temperature drops.</span>
+          </p>
+        </div>
+        <div class="promo-speed" aria-label="Wheel rotation speed">
+          <span id="promo-rpm">000</span> <span class="promo-speed-unit">RPM</span>
+        </div>
+        <div id="promo-demo" class="promo-copy promo-copy-bottom" tabindex="-1">
+          <p>
+            <span>See the winter tread in action.</span>
+            <span>Scroll to spin the wheel and watch</span>
+            <span>the snow clear from its grooves.</span>
+          </p>
+          <p>
+            <span>From the first snowfall <i></i> to morning ice,</span>
+            <span>the road changes with the weather.</span>
+            <span>City streets <i></i> and steep climbs</span>
+            <span>put different demands on your tires.</span>
+            <span>Choose a winter tire for your vehicle</span>
+            <span>and the roads <i></i> you drive most</span>
+            <span>throughout the season.</span>
+          </p>
+        </div>
+      </section>
+      <div class="wheel-scan" aria-hidden="true">
+        <div class="scan-readout-bg scan-readout-bg-turns"></div>
+        <div class="scan-readout-bg scan-readout-bg-frequency"></div>
+        <svg viewBox="0 0 480 480" focusable="false">
+          <g class="wheel-scan-guides" fill="none">
+            <path d="M125 100h-25v25m255-25h25v25m0 230v25h-25m-230 0h-25v-25" />
+            <path d="M142 102a169 169 0 0 1 171-13m37 261a169 169 0 0 1-150 54" stroke-dasharray="1 6" />
+          </g>
+          <g class="wheel-scan-target">
+            <path d="M142 194h-24l-19-21" />
+            <rect x="142" y="186" width="16" height="16" />
+            <circle cx="150" cy="194" r="2.8" />
+            <text id="scan-turns" x="119" y="159.5">0.00 REV</text>
+          </g>
+          <g class="wheel-scan-target wheel-scan-target-secondary">
+            <path d="M331 285h10l9 1.5" />
+            <rect x="315" y="277" width="16" height="16" />
+            <circle cx="323" cy="285" r="2.8" />
+            <text id="scan-frequency" x="408" y="286.5">0.00 HZ</text>
+          </g>
+        </svg>
+      </div>
+      <section class="wheel-catalog" lang="en" aria-label="Northgrip winter tire collection">
+        <header class="catalog-top">
+          <button id="catalog-back" type="button">Back to the storm</button>
+          <span class="catalog-brand">Northgrip</span>
+          <button id="catalog-pause" type="button">Pause autoplay</button>
+        </header>
+        <div class="catalog-bottom">
+          <button id="catalog-prev" class="catalog-arrow" type="button" aria-label="Previous tire">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M20 12H4m4-4-4 4 4 4"/></svg>
+          </button>
+          <div class="catalog-product">
+            <h2 id="catalog-name">Alpine GT</h2>
+            <p id="catalog-specs">225/45 R20 · Directional winter tread</p>
+            <div class="catalog-purchase">
+              <strong id="catalog-price">$219</strong>
+              <button id="catalog-order" class="catalog-primary" type="button" aria-haspopup="dialog" aria-controls="catalog-order-dialog">Order tire</button>
+            </div>
+          </div>
+          <button id="catalog-next" class="catalog-arrow" type="button" aria-label="Next tire">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12h16m-4-4 4 4-4 4"/></svg>
+          </button>
+        </div>
+      </section>
+      <dialog id="catalog-order-dialog" class="catalog-dialog" lang="en" aria-labelledby="catalog-order-title">
+        <form method="dialog">
+          <button class="catalog-dialog-close" aria-label="Close order details" autofocus>×</button>
+        </form>
+        <div class="catalog-order-layout">
+          <section class="catalog-order-product" aria-labelledby="catalog-order-name">
+            <canvas id="catalog-order-wheel" width="480" height="480" aria-hidden="true"></canvas>
+            <div class="catalog-order-product-details">
+              <h3 id="catalog-order-name"></h3>
+              <p id="catalog-order-specs"></p>
+              <div class="catalog-order-unit-price"><strong id="catalog-order-price"></strong> <span>USD / tire</span></div>
+            </div>
+          </section>
+          <form class="catalog-order-form" aria-labelledby="catalog-order-title">
+            <h2 id="catalog-order-title">Order request</h2>
+            <p id="catalog-order-note">Choose a quantity, then copy your request to share it.</p>
+            <label for="catalog-quantity">Quantity</label>
+            <select id="catalog-quantity">
+              <option value="1">1 tire</option>
+              <option value="2">2 tires</option>
+              <option value="3">3 tires</option>
+              <option value="4">4 tires</option>
+            </select>
+            <div class="catalog-order-subtotal">
+              <span>Estimated total</span>
+              <strong id="catalog-order-total"></strong>
+            </div>
+            <button id="catalog-copy-order" class="catalog-primary" type="button">Copy order details</button>
+            <textarea id="catalog-order-summary" aria-label="Order request to copy" rows="4" readonly hidden></textarea>
+            <p id="catalog-order-status" role="status"></p>
+          </form>
+        </div>
+      </dialog>
+      <div id="loading"><span class="loading-mark">✳</span><span>Формуємо крижану ущелину…</span></div>
+      <div id="error" hidden><h1>Не вдалося відкрити 3D-сцену</h1><p>Для перегляду потрібен браузер із підтримкою WebGL 2 та апаратним прискоренням.</p><button onclick="location.reload()">Спробувати знову</button></div>
+      <header class="studio-bar" id="studio-bar">
+        <div class="studio-title"><span class="studio-symbol">✳</span><span>Зимова сцена</span><span class="title-divider"></span><span class="muted">Студія матеріалів</span></div>
+        <div class="bar-actions"><span class="live-indicator"><i></i> Наживо</span><button id="hide-ui" class="quiet-button" title="Сховати панелі (H)">Сховати панелі <kbd>H</kbd></button></div>
+      </header>
+      <aside id="control-panel" aria-label="Налаштування сцени">
+        <div class="panel-heading"><span>Налаштування</span><button id="reset-all" class="text-button">Скинути все</button></div>
+        <nav id="panel-tabs" aria-label="Панелі керування"></nav>
+        <div id="panel-content"></div>
+        <footer class="panel-footer"><span id="preset-status" role="status">Зміни зберігаються в браузері</span><button id="retry-preset" title="Повторити запис у проєкт" aria-label="Повторити запис у проєкт" hidden>↻</button><button id="export-settings" title="Завантажити налаштування JSON" aria-label="Завантажити налаштування">↓</button><button id="import-settings" title="Завантажити свої налаштування" aria-label="Імпортувати налаштування">↑</button><input id="settings-file" type="file" accept="application/json" hidden></footer>
+      </aside>
+      <div id="scene-controls" class="scene-controls" aria-label="Керування переглядом">
+        <button id="pause" title="Пауза (пробіл)" aria-label="Зупинити анімацію"><span id="pause-icon">Ⅱ</span></button>
+        <span class="control-divider"></span><button id="reset-camera" title="Повернути початковий ракурс" aria-label="Початковий ракурс">◎</button>
+        <span class="control-divider"></span><button id="fullscreen" title="На весь екран" aria-label="На весь екран">⛶</button>
+        <span class="scene-hint">Скрол — обертання · курсор — паралакс</span>
+      </div>
+      <div id="motion-readout" class="motion-readout"><span class="readout-dot"></span><span id="motion-state">Колесо на скелі</span><span class="readout-separator">/</span><span id="rpm-readout">0 об/хв</span></div>
+      <button id="show-ui" class="show-ui" hidden aria-label="Панелі керування" title="Панелі керування · H">☷</button>
+      <div id="toast" role="status"></div>
+    </main>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

@@ -1,0 +1,12 @@
+Winter Condensed Bold is derived from Bebas Neue Bold, the 2014 Fontfabric
+edition archived by Dharma Type.
+
+Original type design: Ryoichi Tsunekawa
+Original font production: Fontfabric and Dharma Type
+Copyright (c) 2010 by Ryoichi Tsunekawa. All rights reserved.
+Source: https://github.com/dharmatype/Bebas-Neue/tree/master/fonts/BebasNeue(2014)ByFontFabric
+License: SIL Open Font License 1.1. See BebasNeue-OFL.pdf in this directory.
+
+Modifications: added Ukrainian Ґ/ґ and Є/є using the original Cyrillic
+outlines as a basis, mapped І/і and Ї/ї to the equivalent existing forms,
+renamed the font family, and encoded the web font as WOFF2.
