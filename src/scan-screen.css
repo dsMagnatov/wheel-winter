@@ -304,9 +304,84 @@
 .wheel-catalog button:focus-visible,
 .catalog-dialog :is(button, select, textarea):focus-visible { outline-color: #1c5080; }
 
+@media (max-width: 760px) {
+  .wheel-catalog {
+    background: linear-gradient(180deg, #07172699, transparent 20%, transparent 63%, #071726ed 100%);
+  }
+
+  .catalog-top {
+    inset: max(12px, env(safe-area-inset-top)) 12px auto;
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+    gap: 7px;
+  }
+
+  .catalog-top button {
+    min-height: 44px;
+    padding: 5px 7px;
+    font-size: clamp(13px, 3.5vw, 16px);
+    line-height: 1;
+  }
+
+  .catalog-brand { font-size: clamp(22px, 6vw, 31px); }
+
+  .catalog-bottom {
+    inset: auto 12px max(18px, env(safe-area-inset-bottom));
+    display: grid;
+    grid-template-columns: 44px minmax(0, 1fr) 44px;
+    gap: 6px;
+  }
+
+  .catalog-arrow { width: 44px; }
+  .catalog-product { min-width: 0; }
+  .catalog-product h2 { font-size: clamp(32px, 9vw, 52px); }
+  .catalog-product p { font-size: clamp(13px, 3.6vw, 16px); }
+  .catalog-purchase { gap: 12px; }
+  .catalog-purchase strong { font-size: 29px; }
+  .catalog-primary { padding-inline: 13px; font-size: 19px; }
+}
+
 @media (max-width: 620px) {
+  .catalog-dialog {
+    width: calc(100% - 24px);
+    max-width: none;
+    max-height: calc(100dvh - 24px);
+  }
+
   .catalog-order-layout { grid-template-columns: 1fr; }
-  .catalog-dialog-close { color: #fff; }
+
+  .catalog-order-product {
+    grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
+    align-items: center;
+    gap: 8px;
+    padding: 40px 14px 14px;
+  }
+
+  #catalog-order-wheel { width: 100%; }
+  .catalog-order-product h3,
+  .catalog-order-form h2 { font-size: 30px; }
+  .catalog-order-product-details p { margin: 5px 0 10px; font-size: 13px; }
+  .catalog-order-unit-price strong,
+  .catalog-order-subtotal strong { font-size: 27px; }
+  .catalog-order-unit-price span { font-size: 13px; }
+  .catalog-order-form { padding: 20px; }
+  .catalog-order-form p { margin: 7px 0 12px; }
+  .catalog-order-form select { min-height: 44px; font-size: 16px; }
+  .catalog-order-subtotal { margin: 14px 0; }
+  .catalog-order-form .catalog-primary { width: 100%; }
+  .catalog-dialog-close {
+    top: 0;
+    right: 0;
+    width: 44px;
+    height: 44px;
+    color: #fff;
+  }
+}
+
+@media (max-width: 950px) and (orientation: landscape) and (max-height: 500px) {
+  .catalog-top { top: 8px; }
+  .catalog-bottom { bottom: 8px; }
+  .catalog-product h2 { font-size: 30px; }
+  .catalog-product p { margin: 2px 0 5px; font-size: 13px; }
 }
 
 @media (prefers-reduced-motion: reduce) {

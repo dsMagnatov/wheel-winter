@@ -5,11 +5,14 @@
   "type": "module",
   "packageManager": "pnpm@11.25.0",
   "scripts": {
-    "preset:apply": "node scripts/apply-scene-preset.mjs",
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview --host 0.0.0.0"
   },
-  "dependencies": { "three": "0.180.0" },
-  "devDependencies": { "vite": "7.1.12" }
+  "dependencies": {
+    "three": "0.180.0"
+  },
+  "devDependencies": {
+    "vite": "7.1.12"
+  }
 }

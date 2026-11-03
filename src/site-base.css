@@ -1,0 +1,23 @@
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;450;500;600&display=swap');
+
+:root{font-family:'IBM Plex Mono',monospace;color:#dedee1;background:#b3bcc7;font-synthesis:none;color-scheme:dark;font-size:15px}
+*{box-sizing:border-box}
+body{margin:0;overflow:hidden}
+button,input,select{font:inherit}
+button{cursor:pointer;color:inherit}
+button:focus-visible,input:focus-visible,select:focus-visible,summary:focus-visible{outline:2px solid #bcd4f5;outline-offset:4px}
+button{border:0;background:none}
+button:hover{color:#fff}
+button:disabled{opacity:.35;cursor:default}
+[hidden]{display:none!important}
+#app{position:relative;height:100vh;height:100dvh;overflow:hidden}
+#scene{width:100%;height:100%;display:block;outline:none;cursor:grab}
+#scene:active{cursor:grabbing}
+#loading{position:absolute;inset:0;display:flex;flex-direction:column;gap:20px;align-items:center;justify-content:center;background:#a5afbb;z-index:20;font-size:16px;color:#253244;transition:opacity .7s}
+#loading.loaded{opacity:0;pointer-events:none}
+.loading-mark{font-size:50px;animation:spin 5s linear infinite}
+#error{position:absolute;inset:0;background:#111820;z-index:30;padding:15vh 15vw;color:#dae3ee}
+#error h1{font-size:28px}
+#error p{font-size:17px;line-height:1.7;max-width:650px}
+#error button{border:1px solid #6f7f95;padding:12px 20px;margin-top:20px}
+@keyframes spin{to{transform:rotate(360deg)}}

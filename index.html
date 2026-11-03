@@ -4,12 +4,12 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#0d0e10" />
-    <meta name="description" content="Зимовий ландшафт, сніг і колесо. Інтерактивна студія матеріалів та освітлення на Three.js." />
-    <title>Зимова сцена · Студія колеса</title>
+    <meta name="description" content="Northgrip winter tires. An interactive showcase in a winter storm." />
+    <title>Northgrip · Winter Tires</title>
     <link rel="stylesheet" href="/src/scan-screen.css" />
   </head>
   <body>
-    <main id="app">
+    <main id="app" class="ui-hidden">
       <canvas id="scene" aria-label="Колесо між двома крижаними скелями у сніговій бурі"></canvas>
       <svg class="promo-filter-definitions" width="0" height="0" aria-hidden="true" focusable="false">
         <defs>
@@ -79,6 +79,7 @@
             <span>throughout the season.</span>
           </p>
         </div>
+        <p class="promo-touch-hint">Swipe up to spin. Keep swiping to open the collection.</p>
       </section>
       <div class="wheel-scan" aria-hidden="true">
         <div class="scan-readout-bg scan-readout-bg-turns"></div>
@@ -160,26 +161,7 @@
       </dialog>
       <div id="loading"><span class="loading-mark">✳</span><span>Формуємо крижану ущелину…</span></div>
       <div id="error" hidden><h1>Не вдалося відкрити 3D-сцену</h1><p>Для перегляду потрібен браузер із підтримкою WebGL 2 та апаратним прискоренням.</p><button onclick="location.reload()">Спробувати знову</button></div>
-      <header class="studio-bar" id="studio-bar">
-        <div class="studio-title"><span class="studio-symbol">✳</span><span>Зимова сцена</span><span class="title-divider"></span><span class="muted">Студія матеріалів</span></div>
-        <div class="bar-actions"><span class="live-indicator"><i></i> Наживо</span><button id="hide-ui" class="quiet-button" title="Сховати панелі (H)">Сховати панелі <kbd>H</kbd></button></div>
-      </header>
-      <aside id="control-panel" aria-label="Налаштування сцени">
-        <div class="panel-heading"><span>Налаштування</span><button id="reset-all" class="text-button">Скинути все</button></div>
-        <nav id="panel-tabs" aria-label="Панелі керування"></nav>
-        <div id="panel-content"></div>
-        <footer class="panel-footer"><span id="preset-status" role="status">Зміни зберігаються в браузері</span><button id="retry-preset" title="Повторити запис у проєкт" aria-label="Повторити запис у проєкт" hidden>↻</button><button id="export-settings" title="Завантажити налаштування JSON" aria-label="Завантажити налаштування">↓</button><button id="import-settings" title="Завантажити свої налаштування" aria-label="Імпортувати налаштування">↑</button><input id="settings-file" type="file" accept="application/json" hidden></footer>
-      </aside>
-      <div id="scene-controls" class="scene-controls" aria-label="Керування переглядом">
-        <button id="pause" title="Пауза (пробіл)" aria-label="Зупинити анімацію"><span id="pause-icon">Ⅱ</span></button>
-        <span class="control-divider"></span><button id="reset-camera" title="Повернути початковий ракурс" aria-label="Початковий ракурс">◎</button>
-        <span class="control-divider"></span><button id="fullscreen" title="На весь екран" aria-label="На весь екран">⛶</button>
-        <span class="scene-hint">Скрол — обертання · курсор — паралакс</span>
-      </div>
-      <div id="motion-readout" class="motion-readout"><span class="readout-dot"></span><span id="motion-state">Колесо на скелі</span><span class="readout-separator">/</span><span id="rpm-readout">0 об/хв</span></div>
-      <button id="show-ui" class="show-ui" hidden aria-label="Панелі керування" title="Панелі керування · H">☷</button>
-      <div id="toast" role="status"></div>
     </main>
-    <script type="module" src="/src/main.js"></script>
+    <script type="module" src="/src/public-main.js"></script>
   </body>
 </html>

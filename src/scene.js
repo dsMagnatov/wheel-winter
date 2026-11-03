@@ -57,7 +57,7 @@ export class WinterScene{
     this.cameraDistance=11.8;
     this.controls=new OrbitControls(this.camera,canvas);this.controls.enabled=false;this.controls.enableZoom=false;this.controls.enablePan=false;this.controls.enableRotate=false;this.controls.minDistance=this.cameraDistance;this.controls.maxDistance=this.cameraDistance;this.controls.minPolarAngle=.45;this.controls.maxPolarAngle=Math.PI*.55;
     this.cursor=new THREE.Vector2();this.parallax=new THREE.Vector2();this.neutralParallax=new THREE.Vector2();this.cameraSpherical=new THREE.Spherical();
-    canvas.addEventListener('pointermove',event=>{const width=innerWidth-(this.panelVisible?358:0);this.cursor.set(THREE.MathUtils.clamp(event.clientX/width*2-1,-1,1),THREE.MathUtils.clamp(event.clientY/innerHeight*2-1,-1,1));});
+    canvas.addEventListener('pointermove',event=>{if(event.pointerType==='touch')return;const width=innerWidth-(this.panelVisible?358:0);this.cursor.set(THREE.MathUtils.clamp(event.clientX/width*2-1,-1,1),THREE.MathUtils.clamp(event.clientY/innerHeight*2-1,-1,1));});
     canvas.addEventListener('pointerleave',()=>this.cursor.set(0,0));
     canvas.addEventListener('wheel',event=>{
       if(event.ctrlKey||event.metaKey)return;
@@ -82,13 +82,20 @@ export class WinterScene{
     this.settledSnow=new SettledSnow({scene:this.scene,cliffs:this.cliffs,settings});
     this.wheelSnow=new WheelSnow({wheelRoot:this.wheelRoot,wheelSpin:this.wheelSpin,settings,onShed:particle=>this.settledSnow.emit(particle)});
     this.catalog=new WheelCatalog(this.wheelRoot,this.rimMaterial,this.rimEdgeMaterial,products,catalogUI.select,catalogUI.setMoving);
-    this.bindCatalogDrag(canvas);
+    this.bindScenePointer(canvas);
     this.resize=()=>{this.renderer.setSize(innerWidth,innerHeight);this.lens.resize(innerWidth,innerHeight,this.renderer.getPixelRatio());this.camera.aspect=innerWidth/innerHeight;this.skyUniforms.uAspect.value=this.camera.aspect;this.adjustView();};window.addEventListener('resize',this.resize);this.adjustView();
     this.renderer.setAnimationLoop(this.animate.bind(this));
     this.ready=Promise.all([this.cliffs.ready,this.skyReady]);
   }
   resetCamera(){this.camera.position.set(0,.3,this.cameraDistance);this.controls.target.set(0,.3,0);this.controls.update();const sphere=new THREE.Spherical().setFromVector3(this.camera.position.clone().sub(this.controls.target));this.baseAzimuth=sphere.theta;this.basePolar=sphere.phi;this.cursor?.set(0,0);this.parallax?.set(0,0);}
-  adjustView(){const width=innerWidth,height=innerHeight;this.camera.fov=Math.min(40,THREE.MathUtils.radToDeg(2*Math.atan(7.2/(this.cameraDistance*(width/height)))));this.camera.setViewOffset(width,height,this.panelVisible?179:0,-10,width,height);this.camera.updateProjectionMatrix();}
+  adjustView(){
+    const width=innerWidth,height=innerHeight,aspect=width/height;
+    const desktopFov=Math.min(40,THREE.MathUtils.radToDeg(2*Math.atan(7.2/(this.cameraDistance*aspect))));
+    const portraitFov=THREE.MathUtils.radToDeg(2*Math.atan(.245/aspect));
+    this.camera.fov=Math.max(desktopFov,Math.min(75,portraitFov));
+    this.camera.setViewOffset(width,height,this.panelVisible?179:0,-10,width,height);
+    this.camera.updateProjectionMatrix();
+  }
   setPanelVisible(visible){this.panelVisible=visible;this.launchGesture=null;this.adjustView();}
   makeSky(){
     const storm=createStormSky(this.settings,this.uniforms.uTime);this.skyUniforms=storm.uniforms;this.sky=storm.sky;this.skyReady=storm.ready;this.scene.add(storm.group);
@@ -309,71 +316,107 @@ export class WinterScene{
   jump(){this.burst();}
   burst(){this.contactSnow.burst(520);}
 
-  bindCatalogDrag(canvas) {
+  bindScenePointer(canvas) {
     const raycaster = new THREE.Raycaster();
     const pointer = new THREE.Vector2();
     const hitArea = new THREE.Sphere();
     let drag = null;
 
-    this.finishCatalogDrag = () => {
+    this.finishScenePointer = () => {
       if (!drag) return;
-      const { id } = drag;
+      const { id, mode } = drag;
       drag = null;
-      this.catalog.endDrag();
+      if (mode === 'inspect') this.catalog.endDrag();
       if (canvas.hasPointerCapture(id)) canvas.releasePointerCapture(id);
     };
 
     canvas.addEventListener('pointerdown', event => {
-      if (this.stage !== 'catalog' || drag || !event.isPrimary || event.button !== 0) return;
-      const wheel = this.catalog.wheels[this.catalog.index];
-      if (!wheel?.visible) return;
-
-      const bounds = canvas.getBoundingClientRect();
-      pointer.set(
-        2 * (event.clientX - bounds.left) / bounds.width - 1,
-        1 - 2 * (event.clientY - bounds.top) / bounds.height,
-      );
-      raycaster.setFromCamera(pointer, this.camera);
-      wheel.getWorldPosition(hitArea.center);
-      hitArea.radius = 1.5 * wheel.scale.x;
-      if (!raycaster.ray.intersectsSphere(hitArea) || !this.catalog.beginDrag()) return;
-
-      drag = { id: event.pointerId, x: event.clientX, y: event.clientY };
+      if (drag || !event.isPrimary || event.button !== 0) return;
+      const touch = event.pointerType === 'touch';
+      let mode;
+      if (this.stage === 'catalog') {
+        const wheel = this.catalog.wheels[this.catalog.index];
+        if (!wheel?.visible) return;
+        const bounds = canvas.getBoundingClientRect();
+        pointer.set(
+          2 * (event.clientX - bounds.left) / bounds.width - 1,
+          1 - 2 * (event.clientY - bounds.top) / bounds.height,
+        );
+        raycaster.setFromCamera(pointer, this.camera);
+        wheel.getWorldPosition(hitArea.center);
+        hitArea.radius = 1.5 * wheel.scale.x;
+        if (raycaster.ray.intersectsSphere(hitArea)) {
+          if (!this.catalog.beginDrag()) return;
+          mode = 'inspect';
+        } else if (touch) {
+          mode = 'browse';
+        }
+      } else if (touch && this.stage === 'storm' && !this.paused && !this.panelVisible) {
+        mode = 'spin';
+        this.cursor.set(0, 0);
+        this.drive.configure(this.settings);
+      }
+      if (!mode) return;
+      drag = { id: event.pointerId, mode, x: event.clientX, y: event.clientY, startY: event.clientY, axis: null };
       canvas.setPointerCapture(drag.id);
       event.preventDefault();
     });
 
     canvas.addEventListener('pointermove', event => {
       if (drag?.id !== event.pointerId) return;
-      this.catalog.dragBy(event.clientX - drag.x, event.clientY - drag.y);
+      if (drag.mode === 'browse') return;
+      if (drag.mode === 'inspect') {
+        this.catalog.dragBy(event.clientX - drag.x, event.clientY - drag.y);
+      } else {
+        if (!drag.axis) {
+          const x = Math.abs(event.clientX - drag.x);
+          const y = Math.abs(event.clientY - drag.startY);
+          if (Math.max(x, y) < 8) return;
+          drag.axis = y >= x ? 'y' : 'x';
+        }
+        if (drag.axis === 'y') {
+          const pixels = scrollPixels((drag.y - event.clientY) * 6);
+          if (Math.abs(pixels) < 3) return;
+          const speed = this.drive.impulse(pixels);
+          this.advanceLaunchGesture(speed, pixels, event.timeStamp, true);
+          if (!drag) return;
+        }
+      }
       drag.x = event.clientX;
       drag.y = event.clientY;
     });
 
     const finish = event => {
-      if (drag?.id === event.pointerId) this.finishCatalogDrag();
+      if (drag?.id !== event.pointerId) return;
+      if (drag.mode === 'browse' && event.type === 'pointerup') {
+        const dx = event.clientX - drag.x;
+        const dy = event.clientY - drag.y;
+        if (Math.abs(dx) >= 42 && Math.abs(dx) > Math.abs(dy) * 1.25) this.catalog.move(-Math.sign(dx));
+      }
+      this.finishScenePointer();
     };
     for (const type of ['pointerup', 'pointercancel', 'lostpointercapture']) {
       canvas.addEventListener(type, finish);
     }
-    window.addEventListener('blur', this.finishCatalogDrag);
+    window.addEventListener('blur', this.finishScenePointer);
   }
 
   setStage(stage){
+    this.finishScenePointer?.();
     this.stage=stage;
     this.spinViewport.dataset.stage=stage;
   }
 
-  advanceLaunchGesture(speed,pixels,now){
+  advanceLaunchGesture(speed,pixels,now,touch=false){
     const direction=Math.sign(pixels);
     const gesture=this.launchGesture;
-    if(!gesture||gesture.direction!==direction||now-gesture.lastInput>1500){
-      this.launchGesture=Math.abs(speed)>=160?{direction,start:now,lastInput:now,distance:0}:null;
+    if(!gesture||gesture.direction!==direction||gesture.touch!==touch||now-gesture.lastInput>1500){
+      this.launchGesture=Math.abs(speed)>=160?{direction,touch,start:now,lastInput:now,distance:0}:null;
       return;
     }
     gesture.lastInput=now;
     gesture.distance+=Math.abs(pixels);
-    if(gesture.distance>=1350&&now-gesture.start>=420&&Math.abs(speed)>=160)this.launchWheel(speed);
+    if(gesture.distance>=(touch?580:1350)&&now-gesture.start>=(touch?90:420)&&Math.abs(speed)>=160)this.launchWheel(speed);
   }
 
   launchWheel(speed){
@@ -394,7 +437,7 @@ export class WinterScene{
 
   returnFromCatalog(){
     if(this.stage!=='catalog')return;
-    this.finishCatalogDrag();
+    this.finishScenePointer();
     this.catalogEntryPosition.copy(this.wheelRoot.position);
     this.catalogEntryRotation.copy(this.wheelRoot.quaternion);
     this.catalogEntryScale=this.wheelRoot.scale.x;
